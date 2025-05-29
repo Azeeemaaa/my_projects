@@ -9,11 +9,11 @@ def generate_password(length=12):
 
 
 if __name__ == "__main__":
-    user_lenght = input("Введите длину пароля (по умолчанию 12): ")
+    user_length = input("Введите длину пароля (по умолчанию 12): ")
     try:
-        length = int(user_lenght)
+        length = int(user_length)
     except ValueError:
-        lenght = 12
+        length = 12
 
     password = generate_password(length)
-    print(f"🔐 Ваш сгенерированный пароль: {password}")
+    print(f"\n🔐 Ваш сгенерированный пароль: \n\n{password}\n")
