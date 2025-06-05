@@ -1,9 +1,11 @@
+import streamlit as st
 import json
 import os
 
 FILENAME = "expenses.json"
 
 
+# Загрузка данных из файла
 def load_expenses():
     if os.path.exists(FILENAME):
         with open(FILENAME, 'r') as f:
@@ -11,58 +13,47 @@ def load_expenses():
     return []
 
 
+# Сохранение данных в файл
 def save_expenses(expenses):
     with open(FILENAME, 'w') as f:
         json.dump(expenses, f, indent=2)
 
 
-def add_expense(expenses):
-    category = input("Введите категорию расхода (например, еда, транспорт): ")
-    amount = input("Введите сумму: ")
-    try:
-        amount = float(amount)
-    except ValueError:
-        print("❌ Ошибка: нужно ввести число.")
-        return
-    expenses.append({'category': category, 'amount': amount})
-    print(f"✅ Добавлено: {category} — {amount} руб.")
+# Интерфейс Streamlit
+st.set_page_config(page_title="Учёт расходов 💸")
 
+st.title("💸 Учёт расходов")
+st.write("Добавляй расходы, и приложение посчитает общую сумму!")
 
-def show_expenses(expenses):
-    if not expenses:
-        print("📭 Пока нет расходов.")
-        return
+# Загружаем текущие расходы
+if "expenses" not in st.session_state:
+    st.session_state.expenses = load_expenses()
 
-    print("\n📒 Ваши расходы:")
+# Форма для добавления нового расхода
+with st.form("add_expense"):
+    category = st.text_input("Категория (еда, транспорт и т.д.)")
+    amount = st.text_input("Сумма")
+    submitted = st.form_submit_button("Добавить")
+
+    if submitted:
+        try:
+            amount = float(amount)
+            st.session_state.expenses.append(
+                {"category": category, "amount": amount})
+            save_expenses(st.session_state.expenses)
+            st.success(f"✅ Добавлено: {category} — {amount} руб.")
+        except ValueError:
+            st.error("❌ Ошибка: сумма должна быть числом.")
+
+# Показать все расходы
+st.subheader("📒 Ваши расходы:")
+
+if not st.session_state.expenses:
+    st.info("Пока нет ни одного расхода.")
+else:
     total = 0
-    for e in expenses:
-        print(f"- {e['category']}: {e['amount']} руб.")
-        total += e['amount']
-    print(f"\n💰 Всего потрачено: {total} руб.")
+    for item in st.session_state.expenses:
+        st.write(f"- {item['category']}: {item['amount']} руб.")
+        total += item['amount']
 
-
-def main():
-    expenses = load_expenses()
-
-    while True:
-        print("\n=== Меню ===")
-        print("1. Показать расходы")
-        print("2. Добавить расход")
-        print("3. Выход")
-
-        choice = input("Выберите действие (1–3): ")
-
-        if choice == "1":
-            show_expenses(expenses)
-        elif choice == "2":
-            add_expense(expenses)
-            save_expenses(expenses)
-        elif choice == "3":
-            print("👋 Выход из программы.")
-            break
-        else:
-            print("⚠️ Неверный выбор. Попробуйте снова.")
-
-
-if __name__ == "__main__":
-    main()
+    st.markdown(f"### 💰 Всего потрачено: **{total} руб.**")
