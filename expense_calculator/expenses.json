@@ -1,0 +1,18 @@
+[
+  {
+    "category": "Food",
+    "amount": 25.0
+  },
+  {
+    "category": "Car",
+    "amount": 20.0
+  },
+  {
+    "category": "Rent",
+    "amount": 3000.0
+  },
+  {
+    "category": "Tire ",
+    "amount": 80.0
+  }
+]
