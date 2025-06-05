@@ -41,7 +41,7 @@ with st.form("add_expense"):
             st.session_state.expenses.append(
                 {"category": category, "amount": amount})
             save_expenses(st.session_state.expenses)
-            st.success(f"✅ Добавлено: {category} — {amount} руб.")
+            st.success(f"✅ Добавлено: {category} — {amount} $.")
         except ValueError:
             st.error("❌ Ошибка: сумма должна быть числом.")
 
@@ -56,4 +56,4 @@ else:
         st.write(f"- {item['category']}: {item['amount']} руб.")
         total += item['amount']
 
-    st.markdown(f"### 💰 Всего потрачено: **{total} дол.**")
+    st.markdown(f"### 💰 Всего потрачено: **{total} $.**")
