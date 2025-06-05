@@ -56,4 +56,4 @@ else:
         st.write(f"- {item['category']}: {item['amount']} руб.")
         total += item['amount']
 
-    st.markdown(f"### 💰 Всего потрачено: **{total} руб.**")
+    st.markdown(f"### 💰 Всего потрачено: **{total} дол.**")
